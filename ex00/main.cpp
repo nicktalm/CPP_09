@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ntalmon <ntalmon@student.42.fr>            +#+  +:+       +#+        */
+/*   By: nicktalmon <nicktalmon@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 11:43:58 by ntalmon           #+#    #+#             */
-/*   Updated: 2025/02/05 13:11:23 by ntalmon          ###   ########.fr       */
+/*   Updated: 2025/02/05 17:09:10 by nicktalmon       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ int main(int ac, char **av)
 		}
 		catch(const std::exception& e)
 		{
-			std::cerr << e.what() << std::endl;
+			std::cerr << "Error: " <<e.what() << std::endl;
 		}
 	}
 	else
