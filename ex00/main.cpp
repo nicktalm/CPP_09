@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nicktalmon <nicktalmon@student.42.fr>      +#+  +:+       +#+        */
+/*   By: ntalmon <ntalmon@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 11:43:58 by ntalmon           #+#    #+#             */
-/*   Updated: 2025/02/05 17:09:10 by nicktalmon       ###   ########.fr       */
+/*   Updated: 2025/02/06 11:46:45 by ntalmon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,8 @@ int main(int ac, char **av)
 	{
 		try
 		{
-			
+			BitcoinExchange exchange(av[1]);
+			// exchange.checkPrice();
 		}
 		catch(const std::exception& e)
 		{
