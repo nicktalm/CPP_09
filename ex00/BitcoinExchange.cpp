@@ -6,7 +6,7 @@
 /*   By: ntalmon <ntalmon@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 11:44:41 by ntalmon           #+#    #+#             */
-/*   Updated: 2025/02/06 14:05:17 by ntalmon          ###   ########.fr       */
+/*   Updated: 2025/02/06 14:15:53 by ntalmon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -128,17 +128,40 @@ bool checkNumberInput(std::string nbr)
 		float value = std::stof(nbr);
 		if (value < 0)
 		{
-			// std::cerr << "Error: Number is negative: " << nbr << std::endl;
+			std::cerr << "Error: Number is negative: " << nbr << std::endl;
 			return false;
 		}
 		if (value > 1000)
 		{
-			// std::cerr << "Error: Number is too big: " << nbr << std::endl;
+			std::cerr << "Error: Number is too big: " << nbr << std::endl;
 			return false;
 		}
 		return true;
 	}
-	// std::cerr << "Error: Invalid number: " << nbr << std::endl;
+	std::cerr << "Error: Invalid number: " << nbr << std::endl;
 	return false;
 }
 
+void BitcoinExchange::checkPrice(void) const
+{
+	for (auto it = this->input.begin(); it != this->input.end(); ++it)
+	{
+		if (!checkDate(it->first))
+		{
+			std::cerr << "Error: bad input => " + it->first << std::endl;
+			continue; // Fehler schnell überspringen
+		}
+		auto found = this->data.lower_bound(it->first);
+		if (found == this->data.end() || found->first != it->first)
+		{
+			--found;  // Korrekte Position finden
+		}
+		if (!checkNumberInput(it->second))
+		{
+			continue; // Ungültige Zahl überspringen
+		}
+		float inputPrice = std::stof(it->second);
+		float dbPrice = std::stof(found->second);
+		std::cout << it->first << " => " << it->second << " = " << inputPrice * dbPrice << std::endl;
+	}
+}

@@ -6,7 +6,7 @@
 /*   By: ntalmon <ntalmon@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 11:43:58 by ntalmon           #+#    #+#             */
-/*   Updated: 2025/02/06 11:46:45 by ntalmon          ###   ########.fr       */
+/*   Updated: 2025/02/06 14:20:24 by ntalmon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ int main(int ac, char **av)
 		try
 		{
 			BitcoinExchange exchange(av[1]);
-			// exchange.checkPrice();
+			exchange.checkPrice();
 		}
 		catch(const std::exception& e)
 		{
@@ -29,7 +29,7 @@ int main(int ac, char **av)
 	}
 	else
 	{
-		std::cerr << "Error: Wrong uber of arguments" << std::endl;
+		std::cerr << "Error: Wrong number of arguments" << std::endl;
 		std::cerr << "Usage: " << av[0] << " <filename>" << std::endl;
 	}
 	return 0;
