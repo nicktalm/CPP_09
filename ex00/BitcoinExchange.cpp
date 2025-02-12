@@ -6,7 +6,7 @@
 /*   By: ntalmon <ntalmon@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 11:44:41 by ntalmon           #+#    #+#             */
-/*   Updated: 2025/02/06 14:15:53 by ntalmon          ###   ########.fr       */
+/*   Updated: 2025/02/11 13:57:27 by ntalmon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,12 +14,34 @@
 
 BitcoinExchange::BitcoinExchange(void){}
 
+// CHECKS!!!
 BitcoinExchange::BitcoinExchange(std::string file)
 {
 	std::ifstream input, data;
+	std::string dataFile = "data.csv";
 
+	if (file.c_str() == NULL || file.empty())
+	{
+		std::cerr << "Error: No file given" << std::endl;
+		return;
+	}
+	if (dataFile.c_str() == NULL || dataFile.empty())
+	{
+		std::cerr << "Error: No data file given" << std::endl;
+		return;
+	}
 	input.open(file);
-	data.open("data.csv");
+	if (!input.is_open())
+	{
+		std::cerr << "Error: Could not open file: " << file << std::endl;
+		return;
+	}
+	data.open(dataFile);
+	if (!data.is_open())
+	{
+		std::cerr << "Error: Could not open file: " << dataFile << std::endl;
+		return;
+	}
 	this->data = readFile(data, ',');
 	this->input = readFile(input, '|');
 	for (const auto &entry : this->data)
