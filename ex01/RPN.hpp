@@ -6,7 +6,7 @@
 /*   By: ntalmon <ntalmon@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 14:18:09 by ntalmon           #+#    #+#             */
-/*   Updated: 2025/02/12 15:42:50 by ntalmon          ###   ########.fr       */
+/*   Updated: 2025/02/13 11:27:08 by ntalmon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ class RPN
 		~RPN(void);
 		bool checkInput(void) const;
 		void parseInput(void);
-		void calculate(std::string s);
+		void calcResult(std::string s);
 		class CalculationException : public std::exception
 		{
 			public:

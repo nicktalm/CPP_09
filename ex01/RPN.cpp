@@ -6,7 +6,7 @@
 /*   By: ntalmon <ntalmon@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 14:17:56 by ntalmon           #+#    #+#             */
-/*   Updated: 2025/02/12 15:50:47 by ntalmon          ###   ########.fr       */
+/*   Updated: 2025/02/13 14:54:22 by ntalmon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,35 +54,31 @@ bool RPN::checkInput() const
 void RPN::parseInput()
 {
 	std::istringstream stream(_input);
-	std::string token;
+	std::string element;
 
-	while (stream >> token)
+	while (stream >> element)
 	{
-		// Falls Token ein Operator ist, Berechnung durchführen
-		if (token == "+" || token == "-" || token == "*" || token == "/")
+		if (element == "+" || element == "-" || element == "*" || element == "/")
 		{
 			if (_stack.size() < 2)
-				throw CalculationException(); // Mindestens zwei Zahlen erforderlich
-			calculate(token);
+				throw CalculationException();
+			calcResult(element);
 		}
-		// Falls Token eine Ziffer (0-9) ist, auf Stack legen
-		else if (token.size() == 1 && std::isdigit(token[0]))
+		else if (element.size() == 1 && std::isdigit(element[0]))
 		{
-			_stack.push(token[0] - '0'); // Char zu int konvertieren
+			_stack.push(element[0] - '0');
 		}
-		// Falls Token ungültig ist, Fehler werfen
 		else
 		{
 			throw InputException();
 		}
 	}
-	// Nach der Verarbeitung muss genau ein Ergebnis auf dem Stack liegen
 	if (_stack.size() != 1)
 		throw CalculationException();
 	std::cout << "\033[32m\033[1mRESULT:\033[0m \033[32m" << _stack.top() << "\033[0m" << std::endl;
 }
 
-void RPN::calculate(std::string s)
+void RPN::calcResult(std::string s)
 {
 	if (_stack.size() < 2)
 		throw CalculationException();

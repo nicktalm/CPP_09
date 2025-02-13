@@ -6,7 +6,7 @@
 /*   By: ntalmon <ntalmon@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 11:44:41 by ntalmon           #+#    #+#             */
-/*   Updated: 2025/02/11 13:57:27 by ntalmon          ###   ########.fr       */
+/*   Updated: 2025/02/13 14:54:01 by ntalmon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,6 @@
 
 BitcoinExchange::BitcoinExchange(void){}
 
-// CHECKS!!!
 BitcoinExchange::BitcoinExchange(std::string file)
 {
 	std::ifstream input, data;
@@ -77,7 +76,6 @@ BitcoinExchange &BitcoinExchange::operator=(const BitcoinExchange &src)
 
 BitcoinExchange::~BitcoinExchange(){}
 
-// Trim-Funktion entfernt alle Leerzeichen aus einem String
 void trim(std::string &str) {
 	str.erase(std::remove_if(str.begin(), str.end(), ::isspace), str.end());
 }
@@ -87,7 +85,7 @@ std::multimap<std::string, std::string> readFile(std::ifstream &input, char deli
 	std::multimap<std::string, std::string> map;
 	std::string line;
 
-	std::getline(input, line); // Erste Zeile (Header) ignorieren
+	std::getline(input, line);
 	while (std::getline(input, line))
 	{
 		size_t sep = line.find(delimiter);
