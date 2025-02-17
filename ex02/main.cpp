@@ -6,7 +6,7 @@
 /*   By: ntalmon <ntalmon@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 15:57:06 by ntalmon           #+#    #+#             */
-/*   Updated: 2025/02/14 18:20:09 by ntalmon          ###   ########.fr       */
+/*   Updated: 2025/02/17 13:52:24 by ntalmon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,8 +26,7 @@ int main(int ac, char **av)
 		}
 		
 		PmergeMe pmergeMe(ac, av);
-		pmergeMe.fjmi_sort_vec();
-		pmergeMe.fjmi_sort_deq();
+		pmergeMe.fjmi_sort();
 	}
 	catch (const std::exception &e)
 	{
