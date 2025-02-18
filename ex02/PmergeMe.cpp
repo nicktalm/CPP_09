@@ -6,7 +6,7 @@
 /*   By: ntalmon <ntalmon@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 14:56:53 by ntalmon           #+#    #+#             */
-/*   Updated: 2025/02/17 15:18:27 by ntalmon          ###   ########.fr       */
+/*   Updated: 2025/02/18 16:36:25 by ntalmon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,14 +70,13 @@ bool PmergeMe::isPositiveInteger(const std::string& str)
 
 void PmergeMe::fjmi_sort(void)
 {
-		int size_pair = 1;
+	int size_pair = 1;
 	bool odd = this->_deque_data.size() % 2;
 	iteratorDeque it_d_begin = this->_deque_data.begin();
 	iteratorDeque it_d_end = this->_deque_data.end();
 	iteratorVector it_v_begin = this->_data_vector.begin();
 	iteratorVector it_v_end = this->_data_vector.end();
-	
-	std::deque<int> arr = _deque_data;
+
 	if (odd)
 	{
 		it_d_end = std::prev(it_d_end);
@@ -114,6 +113,7 @@ void PmergeMe::fjmi_sort_vec(iteratorVector it_begin, iteratorVector it_end, int
 	size_pair *= 2;
 	std::cout << "pairSize = " << size_pair << " distance = " << std::distance(it_begin, it_end) << std::endl;
 	this->fjmi_sort_vec(it_begin, it_end, size_pair);
+	//INSERT
 	std::cout << "pairSize = " << size_pair << " distance = " << std::distance(it_begin, it_end) << std::endl;
 }
 
@@ -134,6 +134,9 @@ void PmergeMe::fjmi_sort_deq(iteratorDeque it_begin, iteratorDeque it_end, int s
 
 void PmergeMe::merge_vector(iteratorVector it_begin, iteratorVector it_end, int pairSize)
 {
+	if (std::distance(it_begin, it_end) < pairSize * 2)
+		return;
+
 	std::pair<iteratorVector, iteratorVector> firstPair;
 	std::pair<iteratorVector, iteratorVector> secondPair;
 
@@ -163,6 +166,9 @@ void PmergeMe::merge_vector(iteratorVector it_begin, iteratorVector it_end, int 
 
 void PmergeMe::merge_deque(iteratorDeque it_begin, iteratorDeque it_end, int pairSize)
 {
+	if (std::distance(it_begin, it_end) < pairSize * 2)
+		return;
+
 	std::pair<iteratorDeque, iteratorDeque> firstPair;
 	std::pair<iteratorDeque, iteratorDeque> secondPair;
 
