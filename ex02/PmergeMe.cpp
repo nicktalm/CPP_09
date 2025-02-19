@@ -6,7 +6,7 @@
 /*   By: ntalmon <ntalmon@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 14:56:53 by ntalmon           #+#    #+#             */
-/*   Updated: 2025/02/19 15:39:45 by ntalmon          ###   ########.fr       */
+/*   Updated: 2025/02/19 16:38:21 by ntalmon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,36 +106,55 @@ void PmergeMe::printDeque(void)
 
 void PmergeMe::insert_vector(iteratorVector it_begin, iteratorVector it_end, int size_pair)
 {
-	std::cout << "Insert" << std::endl;
 	if (std::distance(it_begin, it_end) < size_pair * 2)
 		return;
-	std::cout << "size_pair = " << size_pair << std::endl;
-	std::cout << "\033[31mpairSize = " << size_pair << " distance = " << std::distance(it_begin, it_end) << "\033[0m" << std::endl;
+
+	std::vector<iteratorVector> b_pairs; // Container für B-Paare
+	bool toggle = false; 
+	bool first_b_skipped = false;
+
+	std::cout << "Gesamter Vektor: ";
+	for (iteratorVector it = it_begin; it != it_end; ++it)
+		std::cout << *it << " ";
+	std::cout << "\n\n";
 
 	int pairIndexA = 1;
 	int pairIndexB = 1;
-	bool toggle = false; // Toggle to switch between A and B
+
 	for (iteratorVector it = it_begin; it != it_end; it = std::next(it, size_pair))
 	{
-		iteratorVector lastElement = std::next(it, size_pair - 1);
-		if (toggle)
-		{
-			std::cout << "Pair a" << pairIndexA << " of size " << size_pair << ": ";
-			pairIndexA++;
-		}
-		else
-		{
-			std::cout << "Pair b" << pairIndexB << " of size " << size_pair << ": ";
-			pairIndexB++;
-		}
-		toggle = !toggle; // Switch between A and B
+		std::cout << (toggle ? "A-Paar " : "B-Paar ") << (toggle ? pairIndexA++ : pairIndexB++) << ": ";
 
 		for (iteratorVector pairIt = it; pairIt != std::next(it, size_pair) && pairIt != it_end; ++pairIt)
 		{
-			if (pairIt == lastElement && lastElement < it_end)
-				std::cout << "\033[31m" << *pairIt << "\033[0m ";
+			std::cout << *pairIt << " ";
+		}
+
+		if (!toggle) // B-Paar
+		{
+			if (first_b_skipped)
+			{
+				b_pairs.push_back(it);
+				std::cout << "(wird gespeichert)";
+			}
 			else
-				std::cout << *pairIt << " ";
+			{
+				std::cout << "(bleibt als erstes B-Paar)";
+				first_b_skipped = true;
+			}
+		}
+		std::cout << std::endl;
+
+		toggle = !toggle;
+	}
+
+	std::cout << "\nGespeicherte B-Paare (außer das erste):\n";
+	for (size_t i = 0; i < b_pairs.size(); i++)
+	{
+		std::cout << "B-Paar " << (i + 2) << ": ";
+		for (iteratorVector pairIt = b_pairs[i]; pairIt != std::next(b_pairs[i], size_pair) && pairIt != it_end; ++pairIt)
+		{
+			std::cout << *pairIt << " ";
 		}
 		std::cout << std::endl;
 	}
