@@ -6,7 +6,7 @@
 /*   By: ntalmon <ntalmon@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 14:57:05 by ntalmon           #+#    #+#             */
-/*   Updated: 2025/02/18 16:36:12 by ntalmon          ###   ########.fr       */
+/*   Updated: 2025/02/19 12:23:38 by ntalmon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,4 +46,5 @@ class PmergeMe
 		void merge_deque(iteratorDeque it_begin, iteratorDeque it_end, int size_pair);
 		void printVector(void);
 		void printDeque(void);
+		void insert_vector(iteratorVector it_begin, iteratorVector it_end, int size_pair);
 };

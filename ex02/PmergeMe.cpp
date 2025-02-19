@@ -6,7 +6,7 @@
 /*   By: ntalmon <ntalmon@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 14:56:53 by ntalmon           #+#    #+#             */
-/*   Updated: 2025/02/18 16:36:25 by ntalmon          ###   ########.fr       */
+/*   Updated: 2025/02/19 13:16:52 by ntalmon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,7 +83,9 @@ void PmergeMe::fjmi_sort(void)
 		it_v_end = std::prev(it_v_end);
 	}
 	fjmi_sort_vec(it_v_begin, it_v_end, size_pair);
+	insert_vector(it_v_begin, it_v_end, size_pair);
 	fjmi_sort_deq(it_d_begin, it_d_end, size_pair);
+	printVector();
 }
 
 void PmergeMe::printVector(void)
@@ -102,6 +104,22 @@ void PmergeMe::printDeque(void)
 	std::cout << std::endl;
 }
 
+void PmergeMe::insert_vector(iteratorVector it_begin, iteratorVector it_end, int size_pair)
+{
+	std::cout << "Insert" << std::endl;
+	if (std::distance(it_begin, it_end) < size_pair * 2)
+		return;
+	std::cout << "size_pair = " << size_pair << std::endl;
+	std::cout << "\033[31mpairSize = " << size_pair << " distance = " << std::distance(it_begin, it_end) << "\033[0m" << std::endl;
+
+	for (iteratorVector it = it_begin; it != it_end; it = std::next(it, size_pair))
+	{
+		iteratorVector lastElement = std::next(it, size_pair - 1);
+		if (lastElement < it_end)
+			std::cout << "Last element in pair of size " << size_pair << ": " << *lastElement << std::endl;
+	}
+}
+
 void PmergeMe::fjmi_sort_vec(iteratorVector it_begin, iteratorVector it_end, int size_pair)
 {
 	if (size_pair == std::distance(it_begin, it_end))
@@ -109,12 +127,12 @@ void PmergeMe::fjmi_sort_vec(iteratorVector it_begin, iteratorVector it_end, int
 	while (std::distance(it_begin, it_end) % (size_pair * 2) != 0)
 		it_end = std::prev(it_end);
 	merge_vector(it_begin, it_end, size_pair);
+	std::cout << "pairSize = " << size_pair << " distance = " << std::distance(it_begin, it_end) << std::endl;
 	this->printVector();
 	size_pair *= 2;
-	std::cout << "pairSize = " << size_pair << " distance = " << std::distance(it_begin, it_end) << std::endl;
 	this->fjmi_sort_vec(it_begin, it_end, size_pair);
-	//INSERT
-	std::cout << "pairSize = " << size_pair << " distance = " << std::distance(it_begin, it_end) << std::endl;
+	insert_vector(it_begin, it_end, size_pair);
+	// std::cout << "pairSize = " << size_pair << " distance = " << std::distance(it_begin, it_end) << std::endl;
 }
 
 void PmergeMe::fjmi_sort_deq(iteratorDeque it_begin, iteratorDeque it_end, int size_pair)
@@ -124,12 +142,12 @@ void PmergeMe::fjmi_sort_deq(iteratorDeque it_begin, iteratorDeque it_end, int s
 	while (std::distance(it_begin, it_end) % (size_pair * 2) != 0)
 		it_end = std::prev(it_end);
 	merge_deque(it_begin, it_end, size_pair);
-	this->printDeque();
+	// this->printDeque();
 	size_pair *= 2;
-	std::cout << "pairSize = " << size_pair << " distance = " << std::distance(it_begin, it_end) << std::endl;
+	// std::cout << "pairSize = " << size_pair << " distance = " << std::distance(it_begin, it_end) << std::endl;
 	this->fjmi_sort_deq(it_begin, it_end, size_pair);
 	//INSERT
-	std::cout << "pairSize = " << size_pair << " distance = " << std::distance(it_begin, it_end) << std::endl;
+	// std::cout << "pairSize = " << size_pair << " distance = " << std::distance(it_begin, it_end) << std::endl;
 }
 
 void PmergeMe::merge_vector(iteratorVector it_begin, iteratorVector it_end, int pairSize)
