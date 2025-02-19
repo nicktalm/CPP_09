@@ -6,7 +6,7 @@
 /*   By: ntalmon <ntalmon@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 14:56:53 by ntalmon           #+#    #+#             */
-/*   Updated: 2025/02/19 13:16:52 by ntalmon          ###   ########.fr       */
+/*   Updated: 2025/02/19 15:39:45 by ntalmon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,11 +112,32 @@ void PmergeMe::insert_vector(iteratorVector it_begin, iteratorVector it_end, int
 	std::cout << "size_pair = " << size_pair << std::endl;
 	std::cout << "\033[31mpairSize = " << size_pair << " distance = " << std::distance(it_begin, it_end) << "\033[0m" << std::endl;
 
+	int pairIndexA = 1;
+	int pairIndexB = 1;
+	bool toggle = false; // Toggle to switch between A and B
 	for (iteratorVector it = it_begin; it != it_end; it = std::next(it, size_pair))
 	{
 		iteratorVector lastElement = std::next(it, size_pair - 1);
-		if (lastElement < it_end)
-			std::cout << "Last element in pair of size " << size_pair << ": " << *lastElement << std::endl;
+		if (toggle)
+		{
+			std::cout << "Pair a" << pairIndexA << " of size " << size_pair << ": ";
+			pairIndexA++;
+		}
+		else
+		{
+			std::cout << "Pair b" << pairIndexB << " of size " << size_pair << ": ";
+			pairIndexB++;
+		}
+		toggle = !toggle; // Switch between A and B
+
+		for (iteratorVector pairIt = it; pairIt != std::next(it, size_pair) && pairIt != it_end; ++pairIt)
+		{
+			if (pairIt == lastElement && lastElement < it_end)
+				std::cout << "\033[31m" << *pairIt << "\033[0m ";
+			else
+				std::cout << *pairIt << " ";
+		}
+		std::cout << std::endl;
 	}
 }
 
