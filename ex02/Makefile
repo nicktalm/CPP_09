@@ -1,6 +1,6 @@
 NAME = PmergeMe
 CC = c++
-CFLAGS = -Wall -Wextra -Werror -std=c++17
+CFLAGS = -Wall -Wextra -Werror -std=c++17 -fsanitize=address
 SOURCE = main.cpp PmergeMe.cpp
 OBJ_DIR = objs
 OBJS = $(addprefix $(OBJ_DIR)/, $(SOURCE:.cpp=.o))
