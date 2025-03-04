@@ -6,7 +6,7 @@
 /*   By: ntalmon <ntalmon@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 14:57:05 by ntalmon           #+#    #+#             */
-/*   Updated: 2025/03/04 14:21:51 by ntalmon          ###   ########.fr       */
+/*   Updated: 2025/03/04 14:33:32 by ntalmon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,10 +42,10 @@ class PmergeMe
 		void fjmi_sort(void);
 		void fjmi_sort_vec(iteratorVector it_end, int size_pair);
 		void fjmi_sort_deq(iteratorDeque it_end, int size_pair);
-		void merge_vector(iteratorVector it_begin, iteratorVector it_end, int size_pair);
+		void merge_vector(iteratorVector it_end, int size_pair);
 		void merge_deque(iteratorDeque it_begin, iteratorDeque it_end, int size_pair);
 		void printVector(void);
 		void printDeque(void);
-		void insert_vector(iteratorVector it_begin, iteratorVector it_end, int size_pair);
+		void insert_vector(iteratorVector it_end, int size_pair);
 		void insert_deque(iteratorDeque it_end, int size_pair);
 };

@@ -6,7 +6,7 @@
 /*   By: ntalmon <ntalmon@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 14:56:53 by ntalmon           #+#    #+#             */
-/*   Updated: 2025/03/04 14:21:59 by ntalmon          ###   ########.fr       */
+/*   Updated: 2025/03/04 14:56:24 by ntalmon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,14 +74,13 @@ void PmergeMe::fjmi_sort(void)
 	bool odd = this->_deque_data.size() % 2 && this->_deque_data.size() > 1;
 	iteratorDeque it_d_end = this->_deque_data.end();
 	iteratorVector it_v_end = this->_data_vector.end();
-	std::deque<int> tmp_deque;
+	std::deque<int> tmp;
 
-	std::copy(this->_deque_data.begin(), this->_deque_data.end(), std::back_inserter(tmp_deque));
+	std::copy(this->_data_vector.begin(), this->_data_vector.end(), std::back_inserter(tmp));
 	if (odd)
-		it_d_end = std::prev(it_d_end);
-	this->fjmi_sort_deq(this->_deque_data.end(), size_pair);
-	this->insert_deque(it_d_end, size_pair);
-
+		it_v_end = std::prev(it_v_end);
+	this->fjmi_sort_vec(this->_data_vector.end(), size_pair);
+	this->insert_vector(it_v_end, size_pair);
 }
 
 // Vector
@@ -96,14 +95,42 @@ void PmergeMe::printVector(void)
 
 void PmergeMe::fjmi_sort_vec(iteratorVector it_end, int size_pair)
 {
+	if (size_pair == std::distance(this->_data_vector.begin(), it_end))
+		return;
+	while (std::distance(this->_data_vector.begin(), it_end) % (size_pair * 2) != 0)
+		it_end = std::prev(it_end);
+	merge_vector(it_end, size_pair);
+	size_pair *= 2;
+	this->fjmi_sort_vec(it_end, size_pair);
+	this->insert_vector(it_end, size_pair);
 }
 
-void PmergeMe::insert_vector(iteratorVector it_begin, iteratorVector it_end, int size_pair)
+void PmergeMe::merge_vector(iteratorVector it_end, int size_pair)
 {
+	std::vector<std::pair<iteratorVector, iteratorVector> > arr(2);
+
+	for (iteratorVector start = this->_data_vector.begin(); start != it_end; start = std::next(start, (size_pair * 2)))
+	{
+		arr[0] = std::pair<iteratorVector, iteratorVector>(start, start + size_pair);
+		arr[1] = std::pair<iteratorVector, iteratorVector>(start + size_pair, start + (size_pair * 2));
+		if (*std::prev(arr[0].second) > *std::prev(arr[1].second))
+			std::rotate(arr[0].first, arr[1].first, arr[1].second);
+	}
 }
 
-void PmergeMe::merge_vector(iteratorVector it_begin, iteratorVector it_end, int pairSize)
+void PmergeMe::insert_vector(iteratorVector it_end, int size_pair)
 {
+	iteratorVector start = this->_data_vector.begin();
+
+	if (size_pair == std::distance(start, it_end) || std::distance(start, it_end) == 2)
+		return;
+	std::vector<int> mainIndex;
+	std::vector<int> pendIndex;
+	size_t currentJ = 3;
+	size_t prevJ = 1;
+	int endJ = -1;
+	int targetIndex;
+	int endIndex;
 }
 
 // Deque
