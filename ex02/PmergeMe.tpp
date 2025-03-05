@@ -6,7 +6,7 @@
 /*   By: ntalmon <ntalmon@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 14:58:21 by ntalmon           #+#    #+#             */
-/*   Updated: 2025/03/05 09:55:09 by ntalmon          ###   ########.fr       */
+/*   Updated: 2025/03/05 11:29:17 by ntalmon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ void createPairs(T &mainIndex, T &pendIndex, int size_pair, size_t size)
 
 	mainIndex.push_back(size_pair);
 	pendIndex.push_back(size_pair * 2);
-	for (size_t s = size_pair * 3; s <= size; s == size_pair)
+	for (size_t s = size_pair * 3; s <= size; s += size_pair)
 	{
 		if (odd)
 			pendIndex.push_back(s);
@@ -30,17 +30,17 @@ void createPairs(T &mainIndex, T &pendIndex, int size_pair, size_t size)
 }
 
 template <typename T>
-int BinarySearch(T &contaienr, T main, int target, int end)
+int BinarySearch(T &container, T main, int target, int end)
 {
 	int low = 0, mid, high = end;
-	int value = contaienr[target];
+	int value = container[target];
 
 	while (low <= high)
 	{
 		mid = low + (high - low) / 2;
 		if (static_cast<size_t>(mid) == main.size())
 			return mid;
-		if (contaienr[main[mid] - 1] < value)
+		if (container[main[mid] - 1] < value)
 			low = mid + 1;
 		else
 			high = mid - 1;
@@ -49,7 +49,7 @@ int BinarySearch(T &contaienr, T main, int target, int end)
 }
 
 template <typename T>
-void insertPair(T &container, T main, T &pend, int index, int pendIndex, int size_pair)
+void insertPair(T &container, T &main, T &pend, int index, int pendIndex, int size_pair)
 {
 	int startI;
 	int startE = pendIndex - size_pair;
@@ -73,5 +73,20 @@ void insertPair(T &container, T main, T &pend, int index, int pendIndex, int siz
 			tmp = main[index];
 		else
 			tmp = std::distance(container.begin(), erase) + size_pair;
+		for (typename T::iterator it = main.begin(); it != main.end(); ++it)
+		{
+			if (*it > startI && *it < pendIndex)
+				*it += size_pair;
+		}
+		for (typename T::iterator it = pend.begin(); it != pend.end(); ++it)
+		{
+			if (*it > startI && *it < pendIndex)
+				*it += size_pair;
+		}
+		typename T::iterator pos = std::lower_bound(main.begin(), main.end(), tmp);
+		int find = std::distance(main.begin(), pos);
+		main.insert(main.begin() + find, tmp);
 	}
+	else
+		main.insert(main.begin() + index, pendIndex);
 }
