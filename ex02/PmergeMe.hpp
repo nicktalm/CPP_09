@@ -6,7 +6,7 @@
 /*   By: ntalmon <ntalmon@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 14:57:05 by ntalmon           #+#    #+#             */
-/*   Updated: 2025/03/04 14:33:32 by ntalmon          ###   ########.fr       */
+/*   Updated: 2025/03/04 15:45:58 by ntalmon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,8 @@
 #include <algorithm>
 #include <exception>
 #include <stdexcept>
+
+#include "PmergeMe.tpp"
 
 class PmergeMe
 {
@@ -49,3 +51,14 @@ class PmergeMe
 		void insert_vector(iteratorVector it_end, int size_pair);
 		void insert_deque(iteratorDeque it_end, int size_pair);
 };
+
+void nextJacobsthal(size_t &prevJ, size_t &currentJ);
+
+template <typename T>
+void createPairs(T &mainIndex, T &pendIndex, int size_pair, size_t size);
+
+template <typename T>
+int BinarySearch(T &contaienr, T main, int target, int end);
+
+template <typename T>
+void insertPair(T &container, T &mainIndex, T &pendIndex, int index, int target, int size_pair);

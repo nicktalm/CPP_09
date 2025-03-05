@@ -6,7 +6,7 @@
 /*   By: ntalmon <ntalmon@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 14:56:53 by ntalmon           #+#    #+#             */
-/*   Updated: 2025/03/04 14:56:24 by ntalmon          ###   ########.fr       */
+/*   Updated: 2025/03/04 15:45:17 by ntalmon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -131,6 +131,35 @@ void PmergeMe::insert_vector(iteratorVector it_end, int size_pair)
 	int endJ = -1;
 	int targetIndex;
 	int endIndex;
+
+	createPairs(mainIndex, pendIndex, size_pair, this->_data_vector.size());
+	while (true)
+	{
+		int temp;
+
+		if (pendIndex.size() > currentJ - 2)
+		{
+			targetIndex = currentJ - 2;
+			endIndex = currentJ + prevJ - 1;
+		}
+		else
+		{
+			targetIndex = pendIndex.size() - 1;
+			endIndex = mainIndex.size() -1;
+		}
+		temp = targetIndex;
+		while (targetIndex > endJ)
+		{
+			int index = BinarySearch(this->_data_vector, mainIndex, pendIndex[targetIndex] - 1, endIndex);
+			insertPair(this->_data_vector, mainIndex, pendIndex, index, pendIndex[targetIndex], size_pair);
+			--targetIndex;
+		}
+		endJ = temp;
+		if (static_cast<size_t>(endJ) == mainIndex.size() - 1)
+			break;
+		nextJacobsthal(prevJ, currentJ);
+	}
+	
 }
 
 // Deque
@@ -153,4 +182,13 @@ void PmergeMe::insert_deque(iteratorDeque it_end, int size_pair)
 
 void PmergeMe::merge_deque(iteratorDeque it_begin, iteratorDeque it_end, int pairSize)
 {
+}
+
+// Utils
+
+void nextJacobsthal(size_t &prevJ, size_t &currentJ)
+{
+	size_t nextJ = currentJ + 2 * prevJ;
+	prevJ = currentJ;
+	currentJ = nextJ;
 }
