@@ -6,7 +6,7 @@
 /*   By: ntalmon <ntalmon@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 14:56:53 by ntalmon           #+#    #+#             */
-/*   Updated: 2025/03/05 12:12:15 by ntalmon          ###   ########.fr       */
+/*   Updated: 2025/03/06 15:42:48 by ntalmon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ PmergeMe::PmergeMe(int ac, char **av)
 	{
 		try
 		{
-			_data_vector.push_back(std::stoi(av[i]));
+			data_vector.push_back(std::stoi(av[i]));
 		}
 		catch (const std::invalid_argument &)
 		{
@@ -34,10 +34,17 @@ PmergeMe::PmergeMe(int ac, char **av)
 		}
 	}
 
-	_data_deque = std::deque<int>(_data_vector.begin(), _data_vector.end());
+	data_deque = std::deque<int>(data_vector.begin(), data_vector.end());
 
 	std::cout << "Before: ";
-	for (int num : _data_vector)
+	for (int num : data_deque)
+	{
+		std::cout << num << " ";
+	}
+	std::cout << std::endl;
+
+	std::cout << "Before: ";
+	for (int num : data_vector)
 	{
 		std::cout << num << " ";
 	}
@@ -53,8 +60,8 @@ PmergeMe &PmergeMe::operator=(const PmergeMe &src)
 {
 	if (this != &src)
 	{
-		_data_vector = src._data_vector;
-		_data_deque = src._data_deque;
+		data_vector = src.data_vector;
+		data_deque = src.data_deque;
 	}
 	return *this;
 }
@@ -68,202 +75,200 @@ bool PmergeMe::isPositiveInteger(const std::string& str)
 	return !str.empty() && std::all_of(str.begin(), str.end(), ::isdigit) && (str.size() == 1 || str[0] != '0');
 }
 
-void PmergeMe::fjmi_sort(void)
+void	PmergeMe::sortNumbers(void)
 {
-	int size_pair = 1;
-	bool odd = this->_data_deque.size() % 2 && this->_data_deque.size() > 1;
-	iteratorDeque it_d_end = this->_data_deque.end();
-	iteratorVector it_v_end = this->_data_vector.end();
+	int						size_pair = 1;
+	bool					odd = this->data_deque.size() > 1 && this->data_deque.size() % 2;
+	// IteratorVector			endVector = this->data_vector.end();
+	IteratorDeque			endDeque = this->data_deque.end();
 
 	std::chrono::time_point	start = std::chrono::high_resolution_clock::now();
-	if (odd)
-		it_v_end = std::prev(it_v_end);
-	this->fjmi_sort_vec(it_v_end, size_pair);
-	this->insert_vector(this->_data_vector.end(), size_pair);
+	
+	// if (odd)
+	// 	endVector = std::prev(endVector);
+	// this->sort_vec(endVector, size_pair);
+	// this->insert_vec(this->data_vector.end(), size_pair);
+
 	std::chrono::time_point	end = std::chrono::high_resolution_clock::now();
-	double	diffDq = std::chrono::duration<double, std::micro>(end - start).count();
+	double	diffVec = std::chrono::duration<double, std::micro>(end - start).count();
 	start = std::chrono::high_resolution_clock::now();
+	
 	if (odd)
-		it_d_end = std::prev(it_d_end);
-	this->fjmi_sort_deq(it_d_end, size_pair);
-	this->insert_deque(this->_data_deque.end(), size_pair);
+		endDeque = std::prev(endDeque);
+	this->sort_deque(endDeque, size_pair);
+	this->insert_deque(this->data_deque.end(), size_pair);
+	
 	end = std::chrono::high_resolution_clock::now();
 
-	double	diffVec = std::chrono::duration<double, std::micro>(end - start).count();
-	bool	sortVec = std::is_sorted(this->_data_vector.begin(), this->_data_vector.end());
-	bool	sortDeq = std::is_sorted(this->_data_deque.begin(), this->_data_deque.end());
-	if (sortVec && sortDeq)
-	{
-		this->printVector();
-		std::cout << "Vector sorted in " << diffVec << " microseconds" << std::endl;
-		this->printDeque();
-		std::cout << "Deque sorted in " << diffDq << " microseconds" << std::endl;
-	}
+	double	diffDq = std::chrono::duration<double, std::micro>(end - start).count();
+	bool	sort_deq = std::is_sorted(this->data_deque.begin(), this->data_deque.end());
+	// bool	sort_vec = std::is_sorted(this->data_vector.begin(), this->data_vector.end());
+	if (sort_deq)
+		this->printResult(diffVec, diffDq);
 	else
 		std::cerr << "numbers are not sorted" << std::endl;
 }
 
 // Vector
 
-void PmergeMe::printVector(void)
+void	PmergeMe::sort_vec(IteratorVector ItEnd, int size_pair)
 {
-	std::cout << "\033[34mVector:\033[0m" << std::endl;
-	for (iteratorVector it = this->_data_vector.begin(); it != this->_data_vector.end(); ++it)
-		std::cout << "\033[34m" << *it << " \033[0m";
-	std::cout << std::endl;
-}
-
-void PmergeMe::fjmi_sort_vec(iteratorVector it_end, int size_pair)
-{
-	if (size_pair == std::distance(this->_data_vector.begin(), it_end))
-		return;
-	while (std::distance(this->_data_vector.begin(), it_end) % (size_pair * 2) != 0)
-		it_end = std::prev(it_end);
-	merge_vector(it_end, size_pair);
+	if (size_pair == std::distance(this->data_vector.begin(), ItEnd))
+		return ;
+	while (std::distance(this->data_vector.begin(), ItEnd) % (size_pair * 2) != 0)
+		ItEnd = std::prev(ItEnd);
+	merge_vec(ItEnd, size_pair);
 	size_pair *= 2;
-	this->fjmi_sort_vec(it_end, size_pair);
-	this->insert_vector(it_end, size_pair);
+	this->sort_vec(ItEnd, size_pair);
+	this->insert_vec(ItEnd, size_pair);
 }
 
-void PmergeMe::merge_vector(iteratorVector it_end, int size_pair)
+void PmergeMe::merge_vec(IteratorVector ItEnd, int size_pair)
 {
-	std::vector<std::pair<iteratorVector, iteratorVector> > iteratorPairs(2);
+	std::pair<IteratorVector, IteratorVector> iteratorPair1, iteratorPair2;
 
-	for (iteratorVector start = this->_data_vector.begin(); start != it_end; start = std::next(start, (size_pair * 2)))
+	for (IteratorVector start = data_vector.begin(); start != ItEnd; std::advance(start, size_pair * 2))
 	{
-		iteratorPairs[0] = std::pair<iteratorVector, iteratorVector>(start, start + size_pair);
-		iteratorPairs[1] = std::pair<iteratorVector, iteratorVector>(start + size_pair, start + (size_pair * 2));
-		if (*std::prev(iteratorPairs[0].second) > *std::prev(iteratorPairs[1].second))
-			std::rotate(iteratorPairs[0].first, iteratorPairs[1].first, iteratorPairs[1].second);
+		iteratorPair1 = {start, std::next(start, size_pair)};
+		iteratorPair2 = {std::next(start, size_pair), std::next(start, size_pair * 2)};
+		if (*std::prev(iteratorPair1.second) > *std::prev(iteratorPair2.second))
+			std::rotate(iteratorPair1.first, iteratorPair2.first, iteratorPair2.second);
 	}
 }
 
-void PmergeMe::insert_vector(iteratorVector it_end, int size_pair)
+void	PmergeMe::insert_vec(IteratorVector ItEnd, int size_pair)
 {
-	iteratorVector start = this->_data_vector.begin();
+	IteratorVector	start = this->data_vector.begin();
 
-	if (size_pair == std::distance(start, it_end) || std::distance(start, it_end) == 2)
-		return;
-	std::vector<int> mainIndex;
-	std::vector<int> pendIndex;
-	size_t currentJ = 3;
-	size_t prevJ = 1;
-	int endJ = -1;
-	int targetIndex;
-	int endIndex;
+	if (size_pair == std::distance(start, ItEnd) || std::distance(start, ItEnd) / size_pair == 2)
+		return ;
+	std::vector<int>	mainIndex;
+	std::vector<int>	pendIndex;
+	int				endJ = -1;
+	int				targetIndex;
+	int				endIndex;
+	size_t			currentJ = 3;
+	size_t			previousJ = 1;
 
-	createPairs(mainIndex, pendIndex, size_pair, this->_data_vector.size());
+	createPairs(mainIndex, pendIndex, size_pair, this->data_vector.size());
 	while (true)
 	{
-		int temp;
+		int	tmp;
 
 		if (pendIndex.size() > currentJ - 2)
 		{
 			targetIndex = currentJ - 2;
-			endIndex = currentJ + prevJ - 1;
+			endIndex = currentJ + previousJ - 1;
 		}
 		else
 		{
 			targetIndex = pendIndex.size() - 1;
-			endIndex = mainIndex.size() -1;
+			endIndex = mainIndex.size() - 1;
 		}
-		temp = targetIndex;
+		tmp = targetIndex;
 		while (targetIndex > endJ)
 		{
-			int index = BinarySearch(this->_data_vector, mainIndex, pendIndex[targetIndex] - 1, endIndex);
-			insertPair(this->_data_vector, mainIndex, pendIndex, index, pendIndex[targetIndex], size_pair);
+			int	index = binarySearch(this->data_vector, mainIndex, pendIndex[targetIndex] - 1, endIndex);
+			insertPair(this->data_vector, mainIndex, pendIndex, index, pendIndex[targetIndex], size_pair);
 			--targetIndex;
 		}
-		endJ = temp;
+		endJ = tmp;
 		if (static_cast<size_t>(endJ) == pendIndex.size() - 1)
-			break;
-		nextJacobsthal(prevJ, currentJ);
+			break ;
+		nextJacobsthal(previousJ, currentJ);
 	}
 }
 
 // Deque
 
-void PmergeMe::printDeque(void)
+void	PmergeMe::sort_deque(IteratorDeque ItEnd, int size_pair)
 {
-	std::cout << "\033[32mDeque:\033[0m" << std::endl;
-	for (iteratorDeque it = this->_data_deque.begin(); it != this->_data_deque.end(); ++it)
-		std::cout << "\033[32m" << *it << " \033[0m";
-	std::cout << std::endl;
-}
-
-void PmergeMe::fjmi_sort_deq(iteratorDeque it_end, int size_pair)
-{
-	if (size_pair == std::distance(this->_data_deque.begin(), it_end))
-		return;
-	while (std::distance(this->_data_deque.begin(), it_end) % (size_pair * 2) != 0)
-		it_end = std::prev(it_end);
-	merge_deque(it_end, size_pair);
+	if (size_pair == std::distance(this->data_deque.begin(), ItEnd))
+		return ;
+	while (std::distance(this->data_deque.begin(), ItEnd) % (size_pair * 2) != 0)
+		ItEnd = std::prev(ItEnd);
+	merge_deque(ItEnd, size_pair);
 	size_pair *= 2;
-	this->fjmi_sort_deq(it_end, size_pair);
-	this->insert_deque(it_end, size_pair);
+	this->sort_deque(ItEnd, size_pair);
+	this->insert_deque(ItEnd, size_pair);
 }
 
-void PmergeMe::merge_deque(iteratorDeque it_end, int size_pair)
+void PmergeMe::merge_deque(IteratorDeque ItEnd, int size_pair)
 {
-	std::deque<std::pair<iteratorDeque, iteratorDeque> > iteratorPairs(2);
+	std::pair<IteratorDeque, IteratorDeque> iteratorPair1, iteratorPair2;
 
-	for (iteratorDeque start = this->_data_deque.begin(); start != it_end; start = std::next(start, (size_pair * 2)))
+	for (IteratorDeque start = data_deque.begin(); start != ItEnd; std::advance(start, size_pair * 2))
 	{
-		iteratorPairs[0] = std::pair<iteratorDeque, iteratorDeque>(start, start + size_pair);
-		iteratorPairs[1] = std::pair<iteratorDeque, iteratorDeque>(start + size_pair, start + (size_pair * 2));
-		if (*std::prev(iteratorPairs[0].second) > *std::prev(iteratorPairs[1].second))
-			std::rotate(iteratorPairs[0].first, iteratorPairs[1].first, iteratorPairs[1].second);
+		iteratorPair1 = {start, std::next(start, size_pair)};
+		iteratorPair2 = {std::next(start, size_pair), std::next(start, size_pair * 2)};
+		
+		if (*std::prev(iteratorPair1.second) > *std::prev(iteratorPair2.second))
+			std::rotate(iteratorPair1.first, iteratorPair2.first, iteratorPair2.second);
 	}
 }
 
-void PmergeMe::insert_deque(iteratorDeque it_end, int size_pair)
+void	PmergeMe::insert_deque(IteratorDeque ItEnd, int size_pair)
 {
-	iteratorDeque start = this->_data_deque.begin();
+	IteratorDeque	start = this->data_deque.begin();
 
-	if (size_pair == std::distance(start, it_end) || std::distance(start, it_end) == 2)
-		return;
-	std::deque<int> mainIndex;
-	std::deque<int> pendIndex;
-	size_t currentJ = 3;
-	size_t prevJ = 1;
-	int endJ = -1;
-	int targetIndex;
-	int endIndex;
+	if (size_pair == std::distance(start, ItEnd) || std::distance(start, ItEnd) / size_pair == 2)
+		return ;
+	std::deque<int>	mainIndex;
+	std::deque<int>	pendIndex;
+	int				endJ = -1;
+	int				targetIndex;
+	int				endIndex;
+	size_t			currentJ = 3;
+	size_t			previousJ = 1;
 
-	createPairs(mainIndex, pendIndex, size_pair, this->_data_deque.size());
+	createPairs(mainIndex, pendIndex, size_pair, this->data_deque.size());
 	while (true)
 	{
-		int temp;
+		int	tmp;
 
 		if (pendIndex.size() > currentJ - 2)
 		{
 			targetIndex = currentJ - 2;
-			endIndex = currentJ + prevJ - 1;
+			endIndex = currentJ + previousJ - 1;
 		}
 		else
 		{
 			targetIndex = pendIndex.size() - 1;
-			endIndex = mainIndex.size() -1;
+			endIndex = mainIndex.size() - 1;
 		}
-		temp = targetIndex;
+		tmp = targetIndex;
 		while (targetIndex > endJ)
 		{
-			int index = BinarySearch(this->_data_deque, mainIndex, pendIndex[targetIndex] - 1, endIndex);
-			insertPair(this->_data_deque, mainIndex, pendIndex, index, pendIndex[targetIndex], size_pair);
+			int	index = binarySearch(this->data_deque, mainIndex, pendIndex[targetIndex] - 1, endIndex);
+			insertPair(this->data_deque, mainIndex, pendIndex, index, pendIndex[targetIndex], size_pair);
 			--targetIndex;
 		}
-		endJ = temp;
+		endJ = tmp;
 		if (static_cast<size_t>(endJ) == pendIndex.size() - 1)
-			break;
-		nextJacobsthal(prevJ, currentJ);
+			break ;
+		nextJacobsthal(previousJ, currentJ);
 	}
 }
 
 // Utils
 
-void nextJacobsthal(size_t &prevJ, size_t &currentJ)
+void	nextJacobsthal(size_t &previousJ, size_t &currentJ)
 {
-	size_t nextJ = currentJ + 2 * prevJ;
-	prevJ = currentJ;
+	size_t	nextJ = currentJ + 2 * previousJ;
+	previousJ = currentJ;
 	currentJ = nextJ;
+}
+
+void PmergeMe::printResult(double diffVec, double diffDq)
+{
+	std::cout << "After: ";
+	for (int num : data_vector)
+	{
+		std::cout << num << " ";
+	}
+	std::cout << std::endl;
+	std::cout << "Time to process a range of " << data_vector.size() << " elements with std::vector : ";
+	std::cout << diffVec << " us" << std::endl;
+	std::cout << "Time to process a range of " << data_deque.size() << " elements with std::deque : ";
+	std::cout << diffDq << " us" << std::endl;
 }

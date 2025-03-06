@@ -6,7 +6,7 @@
 /*   By: ntalmon <ntalmon@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 14:57:05 by ntalmon           #+#    #+#             */
-/*   Updated: 2025/03/05 11:59:58 by ntalmon          ###   ########.fr       */
+/*   Updated: 2025/03/06 15:42:31 by ntalmon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,47 +18,44 @@
 #include <algorithm>
 #include <exception>
 #include <stdexcept>
-
+#include <chrono>
 #include "PmergeMe.tpp"
 
 class PmergeMe
 {
 	private:
-
-		//vector
-		std::vector<int> _data_vector;
-
-		//deque
-		std::deque<int> _data_deque;
+		std::deque<int>		data_deque;
+		std::vector<int>	data_vector;
 	public:
-		PmergeMe();
-		PmergeMe(int ac, char **av);
-		PmergeMe(const PmergeMe &src);
-		PmergeMe &operator=(const PmergeMe &src);
-		~PmergeMe();
+		using	IteratorDeque = std::deque<int>::iterator;
+		using	IteratorVector = std::vector<int>::iterator;
 
-		using iteratorDeque = std::deque<int>::iterator;
-		using iteratorVector = std::vector<int>::iterator;
+		PmergeMe(void);
+		PmergeMe(int ac, char **av);
+		PmergeMe(const PmergeMe &cpy);
+		PmergeMe	&operator= (const PmergeMe &cpy);
+		~PmergeMe(void);
 		
-		static bool isPositiveInteger(const std::string& str);
-		void fjmi_sort(void);
-		void fjmi_sort_vec(iteratorVector it_end, int size_pair);
-		void fjmi_sort_deq(iteratorDeque it_end, int size_pair);
-		void merge_vector(iteratorVector it_end, int size_pair);
-		void merge_deque(iteratorDeque it_end, int size_pair);
-		void printVector(void);
-		void printDeque(void);
-		void insert_vector(iteratorVector it_end, int size_pair);
-		void insert_deque(iteratorDeque it_end, int size_pair);
+		void		sortNumbers(void);
+		void		printResult(double diffDq, double diffVec);
+		static bool	isPositiveInteger(const std::string &str);
+
+		void		sort_deque(IteratorDeque ItEnd, int size_pair);
+		void		merge_deque(IteratorDeque ItEnd, int size_pair);
+		void		insert_deque(IteratorDeque end, int size_pair);
+
+		void		sort_vec(IteratorVector ItEnd, int size_pair);
+		void		merge_vec(IteratorVector ItEnd, int size_pair);
+		void		insert_vec(IteratorVector ItEnd, int size_pair);
 };
 
-void nextJacobsthal(size_t &prevJ, size_t &currentJ);
+void	nextJacobsthal(size_t &prevJ, size_t &currJ);
 
 template <typename T>
-void createPairs(T &mainIndex, T &pendIndex, int size_pair, size_t size);
+void	createPairs(T &mainIndex, T &pendIndex, int size_pair, size_t containerSize);
 
 template <typename T>
-int BinarySearch(T &container, T main, int target, int end);
+int		binarySearch(T &container, T mainIndex, int targetIndex, int endIndex);
 
 template <typename T>
-void insertPair(T &container, T &main, T &pend, int index, int pendIndex, int size_pair);
+void	insertPair(T &container, T &mainIndex, T &pendIndex, int indexMain, int indexPend, int size_pair);
