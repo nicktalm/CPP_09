@@ -6,31 +6,31 @@
 /*   By: ntalmon <ntalmon@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 14:58:21 by ntalmon           #+#    #+#             */
-/*   Updated: 2025/03/06 12:04:38 by ntalmon          ###   ########.fr       */
+/*   Updated: 2025/03/10 16:00:00 by ntalmon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "PmergeMe.hpp"
 
 template <typename T>
-void	createPairs(T &mainIndex, T &pendIndex, int size_pair, size_t containerSize)
+void	createPairs(T &Index_main, T &Index_pend, int size_pair, size_t containerSize)
 {
 	bool	odd = true;
 
-	mainIndex.push_back(size_pair);
-	mainIndex.push_back(size_pair * 2);
+	Index_main.push_back(size_pair);
+	Index_main.push_back(size_pair * 2);
 	for (size_t size = size_pair * 3; size <= containerSize; size += size_pair)
 	{
 		if (odd)
-			pendIndex.push_back(size);
+			Index_pend.push_back(size);
 		else
-			mainIndex.push_back(size);
+			Index_main.push_back(size);
 		odd = !odd;
 	}
 }
 
 template <typename T>
-int	binarySearch(T &container, T mainIndex, int targetIndex, int endIndex)
+int	binarySearch(T &container, T Index_main, int targetIndex, int endIndex)
 {
 	int	low = 0, mid, high = endIndex;
 	int	value = container[targetIndex];
@@ -38,9 +38,9 @@ int	binarySearch(T &container, T mainIndex, int targetIndex, int endIndex)
 	while (low <= high)
 	{
 		mid = low + (high - low) / 2;
-		if (static_cast<size_t>(mid) == mainIndex.size())
+		if (static_cast<size_t>(mid) == Index_main.size())
 			return (mid) ;
-		if (container[mainIndex[mid] - 1] < value)
+		if (container[Index_main[mid] - 1] < value)
 			low = mid + 1;
 		else
 			high = mid - 1;
@@ -49,16 +49,16 @@ int	binarySearch(T &container, T mainIndex, int targetIndex, int endIndex)
 }
 
 template <typename T>
-void	insertPair(T &container, T &mainIndex, T &pendIndex, int indexMain, int indexPend, int size_pair)
+void	insertPair(T &container, T &Index_main, T &Index_pend, int indexMain, int indexPend, int size_pair)
 {
 	int	startI;
 	int	startE = indexPend - size_pair;
 	T	input;
 
-	if (mainIndex.begin() + indexMain != mainIndex.end())
-		startI = mainIndex[indexMain] - size_pair;
+	if (Index_main.begin() + indexMain != Index_main.end())
+		startI = Index_main[indexMain] - size_pair;
 	else
-		startI = mainIndex[indexMain - 1] + size_pair;
+		startI = Index_main[indexMain - 1] + size_pair;
 	if (startI != indexPend)
 	{
 		std::copy(container.begin() + startE, container.begin() + indexPend, std::back_inserter(input));
@@ -70,23 +70,23 @@ void	insertPair(T &container, T &mainIndex, T &pendIndex, int indexMain, int ind
 			erase = container.erase(container.begin() + startE, container.begin() + indexPend);
 		int	tmp;
 		if (startI < indexPend)
-			tmp = mainIndex[indexMain];
+			tmp = Index_main[indexMain];
 		else
 			tmp = std::distance(container.begin(), erase) + size_pair;
-		for (typename T::iterator it = mainIndex.begin(); it != mainIndex.end(); ++it)
+		for (typename T::iterator it = Index_main.begin(); it != Index_main.end(); ++it)
 		{
 			if (*it > startI && *it < indexPend)
 				*it += size_pair;
 		}
-		for (typename T::iterator it = pendIndex.begin(); it != pendIndex.end(); ++it)
+		for (typename T::iterator it = Index_pend.begin(); it != Index_pend.end(); ++it)
 		{
 			if (*it > startI && *it < indexPend)
 				*it += size_pair;
 		}
-		typename T::iterator	pos = std::lower_bound(mainIndex.begin(), mainIndex.end(), tmp);
-		int		find = std::distance(mainIndex.begin(), pos);
-		mainIndex.insert(mainIndex.begin() + find, tmp);
+		typename T::iterator	pos = std::lower_bound(Index_main.begin(), Index_main.end(), tmp);
+		int		find = std::distance(Index_main.begin(), pos);
+		Index_main.insert(Index_main.begin() + find, tmp);
 	}
 	else
-		mainIndex.insert(mainIndex.begin() + indexMain, indexPend);
+		Index_main.insert(Index_main.begin() + indexMain, indexPend);
 }

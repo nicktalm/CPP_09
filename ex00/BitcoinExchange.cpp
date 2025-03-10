@@ -6,16 +6,14 @@
 /*   By: ntalmon <ntalmon@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 11:44:41 by ntalmon           #+#    #+#             */
-/*   Updated: 2025/03/05 14:50:45 by ntalmon          ###   ########.fr       */
+/*   Updated: 2025/03/10 16:41:58 by ntalmon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "BitcoinExchange.hpp"
 
-// Konstruktor, der eine Datei einliest und prüft, ob die angegebenen Dateien gültig sind.
 BitcoinExchange::BitcoinExchange(void){}
 
-// Konstruktor, der eine Datei einliest, die Daten überprüft und speichert.
 BitcoinExchange::BitcoinExchange(std::string file)
 {
 	std::ifstream input, data;
@@ -76,14 +74,12 @@ BitcoinExchange::BitcoinExchange(std::string file)
 	}
 }
 
-// Kopierkonstruktor: Erzeugt eine Kopie eines BitcoinExchange-Objekts.
 BitcoinExchange::BitcoinExchange(const BitcoinExchange &src)
 {
 	this->data = src.data;
 	this->input = src.input;
 }
 
-// Zuweisungsoperator: Erlaubt das Zuweisen eines BitcoinExchange-Objekts an ein anderes.
 BitcoinExchange &BitcoinExchange::operator=(const BitcoinExchange &src)
 {
 	if (this != &src)
@@ -94,10 +90,8 @@ BitcoinExchange &BitcoinExchange::operator=(const BitcoinExchange &src)
 	return *this;
 }
 
-// Destruktor: Wird aufgerufen, wenn das BitcoinExchange-Objekt zerstört wird.
 BitcoinExchange::~BitcoinExchange(){}
 
-// Entfernt führende und nachfolgende Leerzeichen aus einem gegebenen String.
 void trim(std::string &str) {
 	str.erase(std::remove_if(str.begin(), str.end(), ::isspace), str.end());
 }

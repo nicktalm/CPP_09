@@ -6,7 +6,7 @@
 /*   By: ntalmon <ntalmon@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 14:56:53 by ntalmon           #+#    #+#             */
-/*   Updated: 2025/03/06 15:42:48 by ntalmon          ###   ########.fr       */
+/*   Updated: 2025/03/10 16:00:00 by ntalmon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@ PmergeMe::PmergeMe(int ac, char **av)
 		try
 		{
 			data_vector.push_back(std::stoi(av[i]));
+			data_deque.push_back(std::stoi(av[i]));
 		}
 		catch (const std::invalid_argument &)
 		{
@@ -33,16 +34,6 @@ PmergeMe::PmergeMe(int ac, char **av)
 			throw std::runtime_error("Error: Number out of range in argument " + std::string(av[i]));
 		}
 	}
-
-	data_deque = std::deque<int>(data_vector.begin(), data_vector.end());
-
-	std::cout << "Before: ";
-	for (int num : data_deque)
-	{
-		std::cout << num << " ";
-	}
-	std::cout << std::endl;
-
 	std::cout << "Before: ";
 	for (int num : data_vector)
 	{
@@ -79,15 +70,15 @@ void	PmergeMe::sortNumbers(void)
 {
 	int						size_pair = 1;
 	bool					odd = this->data_deque.size() > 1 && this->data_deque.size() % 2;
-	// IteratorVector			endVector = this->data_vector.end();
+	IteratorVector			endVector = this->data_vector.end();
 	IteratorDeque			endDeque = this->data_deque.end();
 
 	std::chrono::time_point	start = std::chrono::high_resolution_clock::now();
 	
-	// if (odd)
-	// 	endVector = std::prev(endVector);
-	// this->sort_vec(endVector, size_pair);
-	// this->insert_vec(this->data_vector.end(), size_pair);
+	if (odd)
+		endVector = std::prev(endVector);
+	this->sort_vec(endVector, size_pair);
+	this->insert_vec(size_pair);
 
 	std::chrono::time_point	end = std::chrono::high_resolution_clock::now();
 	double	diffVec = std::chrono::duration<double, std::micro>(end - start).count();
@@ -96,17 +87,17 @@ void	PmergeMe::sortNumbers(void)
 	if (odd)
 		endDeque = std::prev(endDeque);
 	this->sort_deque(endDeque, size_pair);
-	this->insert_deque(this->data_deque.end(), size_pair);
+	this->insert_deque(size_pair);
 	
 	end = std::chrono::high_resolution_clock::now();
 
 	double	diffDq = std::chrono::duration<double, std::micro>(end - start).count();
 	bool	sort_deq = std::is_sorted(this->data_deque.begin(), this->data_deque.end());
-	// bool	sort_vec = std::is_sorted(this->data_vector.begin(), this->data_vector.end());
-	if (sort_deq)
+	bool	sort_vec = std::is_sorted(this->data_vector.begin(), this->data_vector.end());
+	if (sort_vec && sort_deq)
 		this->printResult(diffVec, diffDq);
 	else
-		std::cerr << "numbers are not sorted" << std::endl;
+		std::cerr << "numbers not sorted" << std::endl;
 }
 
 // Vector
@@ -120,9 +111,8 @@ void	PmergeMe::sort_vec(IteratorVector ItEnd, int size_pair)
 	merge_vec(ItEnd, size_pair);
 	size_pair *= 2;
 	this->sort_vec(ItEnd, size_pair);
-	this->insert_vec(ItEnd, size_pair);
+	this->insert_vec(size_pair);
 }
-
 void PmergeMe::merge_vec(IteratorVector ItEnd, int size_pair)
 {
 	std::pair<IteratorVector, IteratorVector> iteratorPair1, iteratorPair2;
@@ -136,44 +126,40 @@ void PmergeMe::merge_vec(IteratorVector ItEnd, int size_pair)
 	}
 }
 
-void	PmergeMe::insert_vec(IteratorVector ItEnd, int size_pair)
+void	PmergeMe::insert_vec(int size_pair)
 {
-	IteratorVector	start = this->data_vector.begin();
-
-	if (size_pair == std::distance(start, ItEnd) || std::distance(start, ItEnd) / size_pair == 2)
-		return ;
-	std::vector<int>	mainIndex;
-	std::vector<int>	pendIndex;
+	std::vector<int>	Index_main;
+	std::vector<int>	Index_pend;
 	int				endJ = -1;
 	int				targetIndex;
 	int				endIndex;
 	size_t			currentJ = 3;
 	size_t			previousJ = 1;
 
-	createPairs(mainIndex, pendIndex, size_pair, this->data_vector.size());
+	createPairs(Index_main, Index_pend, size_pair, this->data_vector.size());
 	while (true)
 	{
 		int	tmp;
 
-		if (pendIndex.size() > currentJ - 2)
+		if (Index_pend.size() > currentJ - 2)
 		{
 			targetIndex = currentJ - 2;
 			endIndex = currentJ + previousJ - 1;
 		}
 		else
 		{
-			targetIndex = pendIndex.size() - 1;
-			endIndex = mainIndex.size() - 1;
+			targetIndex = Index_pend.size() - 1;
+			endIndex = Index_main.size() - 1;
 		}
 		tmp = targetIndex;
 		while (targetIndex > endJ)
 		{
-			int	index = binarySearch(this->data_vector, mainIndex, pendIndex[targetIndex] - 1, endIndex);
-			insertPair(this->data_vector, mainIndex, pendIndex, index, pendIndex[targetIndex], size_pair);
+			int	index = binarySearch(this->data_vector, Index_main, Index_pend[targetIndex] - 1, endIndex);
+			insertPair(this->data_vector, Index_main, Index_pend, index, Index_pend[targetIndex], size_pair);
 			--targetIndex;
 		}
 		endJ = tmp;
-		if (static_cast<size_t>(endJ) == pendIndex.size() - 1)
+		if (static_cast<size_t>(endJ) == Index_pend.size() - 1)
 			break ;
 		nextJacobsthal(previousJ, currentJ);
 	}
@@ -190,7 +176,7 @@ void	PmergeMe::sort_deque(IteratorDeque ItEnd, int size_pair)
 	merge_deque(ItEnd, size_pair);
 	size_pair *= 2;
 	this->sort_deque(ItEnd, size_pair);
-	this->insert_deque(ItEnd, size_pair);
+	this->insert_deque(size_pair);
 }
 
 void PmergeMe::merge_deque(IteratorDeque ItEnd, int size_pair)
@@ -201,50 +187,45 @@ void PmergeMe::merge_deque(IteratorDeque ItEnd, int size_pair)
 	{
 		iteratorPair1 = {start, std::next(start, size_pair)};
 		iteratorPair2 = {std::next(start, size_pair), std::next(start, size_pair * 2)};
-		
 		if (*std::prev(iteratorPair1.second) > *std::prev(iteratorPair2.second))
 			std::rotate(iteratorPair1.first, iteratorPair2.first, iteratorPair2.second);
 	}
 }
 
-void	PmergeMe::insert_deque(IteratorDeque ItEnd, int size_pair)
+void	PmergeMe::insert_deque(int size_pair)
 {
-	IteratorDeque	start = this->data_deque.begin();
-
-	if (size_pair == std::distance(start, ItEnd) || std::distance(start, ItEnd) / size_pair == 2)
-		return ;
-	std::deque<int>	mainIndex;
-	std::deque<int>	pendIndex;
+	std::deque<int>	Index_main;
+	std::deque<int>	Index_pend;
 	int				endJ = -1;
 	int				targetIndex;
 	int				endIndex;
 	size_t			currentJ = 3;
 	size_t			previousJ = 1;
 
-	createPairs(mainIndex, pendIndex, size_pair, this->data_deque.size());
+	createPairs(Index_main, Index_pend, size_pair, this->data_deque.size());
 	while (true)
 	{
 		int	tmp;
 
-		if (pendIndex.size() > currentJ - 2)
+		if (Index_pend.size() > currentJ - 2)
 		{
 			targetIndex = currentJ - 2;
 			endIndex = currentJ + previousJ - 1;
 		}
 		else
 		{
-			targetIndex = pendIndex.size() - 1;
-			endIndex = mainIndex.size() - 1;
+			targetIndex = Index_pend.size() - 1;
+			endIndex = Index_main.size() - 1;
 		}
 		tmp = targetIndex;
 		while (targetIndex > endJ)
 		{
-			int	index = binarySearch(this->data_deque, mainIndex, pendIndex[targetIndex] - 1, endIndex);
-			insertPair(this->data_deque, mainIndex, pendIndex, index, pendIndex[targetIndex], size_pair);
+			int	index = binarySearch(this->data_deque, Index_main, Index_pend[targetIndex] - 1, endIndex);
+			insertPair(this->data_deque, Index_main, Index_pend, index, Index_pend[targetIndex], size_pair);
 			--targetIndex;
 		}
 		endJ = tmp;
-		if (static_cast<size_t>(endJ) == pendIndex.size() - 1)
+		if (static_cast<size_t>(endJ) == Index_pend.size() - 1)
 			break ;
 		nextJacobsthal(previousJ, currentJ);
 	}

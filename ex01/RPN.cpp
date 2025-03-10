@@ -6,40 +6,35 @@
 /*   By: ntalmon <ntalmon@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 14:17:56 by ntalmon           #+#    #+#             */
-/*   Updated: 2025/03/05 14:57:02 by ntalmon          ###   ########.fr       */
+/*   Updated: 2025/03/10 16:51:14 by ntalmon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "RPN.hpp"
 
-// Standardkonstruktor, der keine spezifische Initialisierung durchführt.
 RPN::RPN(void)
 {
 }
 
-// Konstruktor, der die Eingabezeichenkette speichert.
 RPN::RPN(std::string input) : _input(input)
 {
 }
 
-// Kopierkonstruktor, der ein neues Objekt basierend auf einem existierenden erstellt.
 RPN::RPN(RPN const &src)
 {
 	*this = src;
 }
 
-// Zuweisungsoperator, der die Werte eines RPN-Objekts auf ein anderes überträgt.
 RPN &RPN::operator=(RPN const &src)
 {
-	if (this != &src)  // Verhindert Selbstzuweisung.
+	if (this != &src)
 	{
-		_stack = src._stack;  // Kopiert den Stack.
-		_input = src._input;  // Kopiert die Eingabezeichenkette.
+		_stack = src._stack;
+		_input = src._input;
 	}
 	return *this;
 }
 
-// Destruktor, der die notwendigen Aufräumarbeiten durchführt (hier nicht benötigt).
 RPN::~RPN(void)
 {
 }
