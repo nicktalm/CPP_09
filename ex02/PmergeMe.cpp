@@ -6,7 +6,7 @@
 /*   By: ntalmon <ntalmon@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 14:56:53 by ntalmon           #+#    #+#             */
-/*   Updated: 2025/03/10 16:00:00 by ntalmon          ###   ########.fr       */
+/*   Updated: 2025/03/11 09:34:21 by ntalmon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,8 +104,10 @@ void	PmergeMe::sortNumbers(void)
 
 void	PmergeMe::sort_vec(IteratorVector ItEnd, int size_pair)
 {
+	// Abbruchbedingung: Falls die Größe des Paares der Distanz entspricht
 	if (size_pair == std::distance(this->data_vector.begin(), ItEnd))
 		return ;
+	// Anpassung des End-Iterators an die Blockgröße
 	while (std::distance(this->data_vector.begin(), ItEnd) % (size_pair * 2) != 0)
 		ItEnd = std::prev(ItEnd);
 	merge_vec(ItEnd, size_pair);
@@ -117,10 +119,12 @@ void PmergeMe::merge_vec(IteratorVector ItEnd, int size_pair)
 {
 	std::pair<IteratorVector, IteratorVector> iteratorPair1, iteratorPair2;
 
+	// Iteriert über die Vektor-Elemente in Blöcken der Größe size_pair * 2
 	for (IteratorVector start = data_vector.begin(); start != ItEnd; std::advance(start, size_pair * 2))
 	{
 		iteratorPair1 = {start, std::next(start, size_pair)};
 		iteratorPair2 = {std::next(start, size_pair), std::next(start, size_pair * 2)};
+		// Falls das letzte Element des ersten Blocks größer ist als das letzte des zweiten Blocks, wird rotiert
 		if (*std::prev(iteratorPair1.second) > *std::prev(iteratorPair2.second))
 			std::rotate(iteratorPair1.first, iteratorPair2.first, iteratorPair2.second);
 	}
@@ -128,6 +132,7 @@ void PmergeMe::merge_vec(IteratorVector ItEnd, int size_pair)
 
 void	PmergeMe::insert_vec(int size_pair)
 {
+	// Verwaltung der Haupt- und Nebenindizes für das Einfügen
 	std::vector<int>	Index_main;
 	std::vector<int>	Index_pend;
 	int				endJ = -1;
@@ -169,8 +174,10 @@ void	PmergeMe::insert_vec(int size_pair)
 
 void	PmergeMe::sort_deque(IteratorDeque ItEnd, int size_pair)
 {
+	// Abbruchbedingung: Falls die Größe des Paares der Distanz entspricht
 	if (size_pair == std::distance(this->data_deque.begin(), ItEnd))
 		return ;
+	// Anpassung des End-Iterators an die Blockgröße
 	while (std::distance(this->data_deque.begin(), ItEnd) % (size_pair * 2) != 0)
 		ItEnd = std::prev(ItEnd);
 	merge_deque(ItEnd, size_pair);
@@ -183,10 +190,12 @@ void PmergeMe::merge_deque(IteratorDeque ItEnd, int size_pair)
 {
 	std::pair<IteratorDeque, IteratorDeque> iteratorPair1, iteratorPair2;
 
+	// Iteriert über die Vektor-Elemente in Blöcken der Größe size_pair * 2
 	for (IteratorDeque start = data_deque.begin(); start != ItEnd; std::advance(start, size_pair * 2))
 	{
 		iteratorPair1 = {start, std::next(start, size_pair)};
 		iteratorPair2 = {std::next(start, size_pair), std::next(start, size_pair * 2)};
+		// Falls das letzte Element des ersten Blocks größer ist als das letzte des zweiten Blocks, wird rotiert
 		if (*std::prev(iteratorPair1.second) > *std::prev(iteratorPair2.second))
 			std::rotate(iteratorPair1.first, iteratorPair2.first, iteratorPair2.second);
 	}
@@ -194,6 +203,7 @@ void PmergeMe::merge_deque(IteratorDeque ItEnd, int size_pair)
 
 void	PmergeMe::insert_deque(int size_pair)
 {
+	// Verwaltung der Haupt- und Nebenindizes für das Einfügen
 	std::deque<int>	Index_main;
 	std::deque<int>	Index_pend;
 	int				endJ = -1;
